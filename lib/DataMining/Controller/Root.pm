@@ -31,7 +31,7 @@ The root page (/)
 sub index :Path :Args(0) :GET {
     my ( $self, $c ) = @_;
 
-    $c->load_error_msgs;
+    $c->load_status_msgs;
     $c->stash->{template} = 'index.tt';
 
 
