@@ -1,6 +1,6 @@
 # DataMining
 
-** An implementation of a DataMining model generated of CNN RSS for the clasification of news from a Logistics Model Tree **
+__An implementation of a DataMining model generated of CNN RSS for the clasification of news from a Logistics Model Tree__
 
 ## Requirements
 
