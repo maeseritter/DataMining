@@ -28,11 +28,47 @@ The root page (/)
 
 =cut
 
-sub index :Path :Args(0) {
+sub index :Path :Args(0) :GET {
     my ( $self, $c ) = @_;
 
+    $c->load_error_msgs;
+    $c->stash->{template} = 'index.tt';
+
+
     # Hello World
-    $c->response->body( $c->welcome_message );
+    # $c->response->body( $c->welcome_message );
+}
+
+sub execute :Path :Args(0) :POST {
+    my ( $self, $c ) = @_;
+
+    $c->form( url => [qw/NOT_BLANK HTTP_URL/] );
+
+    if ( $c->form->has_error ) {
+            $c->response->redirect($c->uri_for($self->action_for('index'),
+                {mid => $c->set_error_msg('Must supply a valid URL')}));
+    }
+
+    my $model = $c->model('URLoader');
+
+    $model->do_request($c->req->params->{url});
+
+    if ( $model->status != 200 ) {
+            $c->response->redirect($c->uri_for($self->action_for('list'),
+                {mid => $c->set_status_msg('URL responded status ' . $model->status)}));
+    }
+
+    $model->count_words;
+
+    my $probabilities = $model->calculate_probabilities;
+    my $sorted;
+
+    for ( sort { $probabilities->{$a} <=> $probabilities->{$b} } keys %{$probabilities} ) {
+        push @{$sorted}, { name => $_, value => $probabilities->{$_} };
+    }
+
+    $c->stash->{categories} = $sorted;
+    $c->stash->{template} = 'index.tt';
 }
 
 =head2 default

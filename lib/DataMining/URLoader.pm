@@ -1,11 +1,11 @@
-package URLoader;
+package DataMining::URLoader;
 
 use strict;
 use warnings;
 use Carp;
 require LWP::UserAgent;
 use Moose;
-use List::Util qw/reduce sum/;
+use List::Util qw/reduce/;
 use namespace::autoclean;
 
 has 'client' => (

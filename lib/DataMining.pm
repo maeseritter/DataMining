@@ -20,6 +20,8 @@ use Catalyst qw/
     -Debug
     ConfigLoader
     Static::Simple
+    FormValidator::Simple
+    StatusMessage
 /;
 
 extends 'Catalyst';
@@ -37,6 +39,9 @@ our $VERSION = '0.01';
 
 __PACKAGE__->config(
     name => 'DataMining',
+    'View::HTML' => {
+        INCLUDE_PATH    =>  __PACKAGE__->path_to('root','layout'),
+    },
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
     enable_catalyst_header => 1, # Send X-Catalyst header
